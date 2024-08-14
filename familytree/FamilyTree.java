@@ -1,39 +1,37 @@
 package familytree;
 
-import familytree.model.Person;
-
 import java.io.Serializable;
 import java.util.*;
 
-public class FamilyTree implements Serializable, Iterable<Person> {
-    private List<Person> people;
+public class FamilyTree<T extends FamilyMember> implements Serializable, Iterable<T> {
+    private List<T> members;
 
     public FamilyTree() {
-        this.people = new ArrayList<>();
+        this.members = new ArrayList<>();
     }
 
-    public void addPerson(Person person) {
-        this.people.add(person);
+    public void addMember(T member) {
+        this.members.add(member);
     }
 
-    public Person findPersonById(int id) {
-        for (Person person : people) {
-            if (person.getId() == id) {
-                return person;
+    public T findMemberById(int id) {
+        for (T member : members) {
+            if (member.getId() == id) {
+                return member;
             }
         }
         return null;
     }
 
-    public List<Person> getAllChildren(Person person) {
-        return person.getChildren();
+    public List<T> getAllChildren(T member) {
+        return member.getChildren();
     }
 
-    public List<Person> getPeople() {
-        return people;
+    public List<T> getMembers() {
+        return members;
     }
 
-    public void inputPersonData() {
+    public void inputMemberData() {
         Scanner scanner = new Scanner(System.in);
 
         int id = promptForInt(scanner, "Enter ID: ");
@@ -43,50 +41,9 @@ public class FamilyTree implements Serializable, Iterable<Person> {
         String gender = scanner.nextLine();
         int age = promptForInt(scanner, "Enter Age: ");
 
-        Person newPerson = new Person(id, name, gender, age);
+        T newMember = (T) new Person(id, name, gender, age);
 
-        int spouseId = promptForInt(scanner, "Enter Spouse ID (or -1 if none): ");
-        if (spouseId != -1) {
-            Person spouse = findPersonById(spouseId);
-            if (spouse != null) {
-                newPerson.setSpouse(spouse);
-                spouse.setSpouse(newPerson);
-            }
-        }
-
-        int fatherId = promptForInt(scanner, "Enter Father ID (or -1 if unknown): ");
-        if (fatherId != -1) {
-            Person father = findPersonById(fatherId);
-            if (father != null) {
-                newPerson.setFather(father);
-                father.addChild(newPerson);
-            }
-        }
-
-        int motherId = promptForInt(scanner, "Enter Mother ID (or -1 if unknown): ");
-        if (motherId != -1) {
-            Person mother = findPersonById(motherId);
-            if (mother != null) {
-                newPerson.setMother(mother);
-                mother.addChild(newPerson);
-            }
-        }
-
-        int numberOfChildren = promptForInt(scanner, "Enter number of children: ");
-        for (int i = 0; i < numberOfChildren; i++) {
-            int childId = promptForInt(scanner, "Enter Child ID: ");
-            Person child = findPersonById(childId);
-            if (child != null) {
-                newPerson.addChild(child);
-                if (newPerson.getGender().equalsIgnoreCase("Male")) {
-                    child.setFather(newPerson);
-                } else {
-                    child.setMother(newPerson);
-                }
-            }
-        }
-
-        addPerson(newPerson);
+        addMember(newMember);
     }
 
     private int promptForInt(Scanner scanner, String prompt) {
@@ -103,50 +60,48 @@ public class FamilyTree implements Serializable, Iterable<Person> {
         }
     }
 
-    public void displayPersonInfo(int id) {
-        Person person = findPersonById(id);
-        if (person != null) {
-            System.out.println(person);
+    public void displayMemberInfo(int id) {
+        T member = findMemberById(id);
+        if (member != null) {
+            System.out.println(member);
         } else {
-            System.out.println("Person not found.");
+            System.out.println("Member not found.");
         }
     }
 
     public void displayFamilyTree(int id) {
-        Person person = findPersonById(id);
-        if (person != null) {
-            displayFamilyTree(person, 0);
+        T member = findMemberById(id);
+        if (member != null) {
+            displayFamilyTree(member, 0);
         } else {
-            System.out.println("Person not found.");
+            System.out.println("Member not found.");
         }
     }
 
-    private void displayFamilyTree(Person person, int level) {
-        if (person == null) return;
+    private void displayFamilyTree(T member, int level) {
+        if (member == null) return;
 
-        System.out.println(" ".repeat(level * 4) + person.getName() + " (" + person.getGender() + ", " + person.getAge() + ")");
+        System.out.println(" ".repeat(level * 4) + member.getName() + " (" + member.getGender() + ", " + member.getAge() + ")");
 
-        if (person.getSpouse() != null) {
-            System.out.println(" ".repeat(level * 4) + "  Spouse: " + person.getSpouse().getName() + " (" + person.getSpouse().getGender() + ", " + person.getSpouse().getAge() + ")");
+        if (member.getSpouse() != null) {
+            System.out.println(" ".repeat(level * 4) + "  Spouse: " + member.getSpouse().getName() + " (" + member.getSpouse().getGender() + ", " + member.getSpouse().getAge() + ")");
         }
 
-        for (Person child : person.getChildren()) {
+        for (T child : member.getChildren()) {
             displayFamilyTree(child, level + 1);
         }
     }
 
-    // Реализация интерфейса Iterable
     @Override
-    public Iterator<Person> iterator() {
-        return people.iterator();
+    public Iterator<T> iterator() {
+        return members.iterator();
     }
 
-    // Методы сортировки
     public void sortByName() {
-        Collections.sort(people, Comparator.comparing(Person::getName));
+        Collections.sort(members, Comparator.comparing(FamilyMember::getName));
     }
 
     public void sortByAge() {
-        Collections.sort(people, Comparator.comparingInt(Person::getAge));
+        Collections.sort(members, Comparator.comparingInt(FamilyMember::getAge));
     }
 }
