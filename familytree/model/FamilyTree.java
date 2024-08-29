@@ -1,11 +1,12 @@
 package familytree.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class FamilyTree<T extends Person> {
+public class FamilyTree<T extends Person> implements Serializable {
     private List<T> members;
 
     public FamilyTree() {
@@ -35,5 +36,10 @@ public class FamilyTree<T extends Person> {
 
     public List<T> getMembers() {
         return Collections.unmodifiableList(members);
+    }
+
+    public void establishRelationship(T parent, T child) {
+        parent.addChild(child);
+        child.setParents(parent, null);  // Предполагается, что один родитель
     }
 }

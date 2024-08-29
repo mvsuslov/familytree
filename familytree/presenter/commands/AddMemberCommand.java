@@ -1,36 +1,35 @@
 package familytree.presenter.commands;
 
-import familytree.model.FamilyTree;
-import familytree.model.Person;
+import familytree.service.FamilyTreeService;
 import familytree.view.FamilyTreeView;
 
 public class AddMemberCommand implements Command {
-    private FamilyTree<Person> familyTree;
+    private FamilyTreeService service;
     private FamilyTreeView view;
 
-    public AddMemberCommand(FamilyTree<Person> familyTree, FamilyTreeView view) {
-        this.familyTree = familyTree;
+    public AddMemberCommand(FamilyTreeService service, FamilyTreeView view) {
+        this.service = service;
         this.view = view;
     }
 
     @Override
     public void execute() {
-        view.displayMessage("Enter ID:");
+        view.displayMessage("Введите ID:");
         int id = Integer.parseInt(view.getMemberInput());
-        view.displayMessage("Enter Name:");
+        view.displayMessage("Введите имя:");
         String name = view.getMemberInput();
-        view.displayMessage("Enter Gender:");
+        view.displayMessage("Введите пол:");
         String gender = view.getMemberInput();
-        view.displayMessage("Enter Age:");
+        view.displayMessage("Введите возраст:");
         int age = Integer.parseInt(view.getMemberInput());
 
-        Person newMember = new Person(id, name, gender, age);
-        familyTree.addMember(newMember);
-        view.displayMessage("Member added.");
+        service.addMember(id, name, gender, age);
+        view.displayMessage("Человек добавлен.");
     }
 
     @Override
     public String getDescription() {
-        return "Add Member";
+        return "Добавить Человека";
     }
 }
+

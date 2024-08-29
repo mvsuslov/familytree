@@ -1,9 +1,10 @@
 package familytree.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Person {
+public class Person implements Serializable {
     private int id;
     private String name;
     private String gender;
@@ -21,65 +22,28 @@ public class Person {
         this.children = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Person getSpouse() {
-        return spouse;
-    }
-
-    public void setSpouse(Person spouse) {
-        this.spouse = spouse;
-    }
-
-    public Person getMother() {
-        return mother;
-    }
-
-    public void setMother(Person mother) {
-        this.mother = mother;
-    }
-
-    public Person getFather() {
-        return father;
-    }
-
-    public void setFather(Person father) {
-        this.father = father;
-    }
-
-    public List<Person> getChildren() {
-        return children;
-    }
+    // Getters and setters...
 
     public void addChild(Person child) {
-        this.children.add(child);
+        children.add(child);
+    }
+
+    public void setParents(Person father, Person mother) {
+        this.father = father;
+        this.mother = mother;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Человек{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", gender='" + gender + '\'' +
-                ", age=" + age +
-                ", spouse=" + (spouse != null ? spouse.getName() : "none") +
-                ", mother=" + (mother != null ? mother.getName() : "unknown") +
-                ", father=" + (father != null ? father.getName() : "unknown") +
-                ", children=" + children.size() +
+                ", имя='" + name + '\'' +
+                ", пол='" + gender + '\'' +
+                ", возраст=" + age +
+                ", супруг(а)=" + (spouse != null ? spouse.getName() : "отсутствует") +
+                ", мать=" + (mother != null ? mother.getName() : "неизвестно") +
+                ", отец=" + (father != null ? father.getName() : "неизвестно") +
+                ", дети=" + children.size() +
                 '}';
     }
 }

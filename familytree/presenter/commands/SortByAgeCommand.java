@@ -1,26 +1,25 @@
 package familytree.presenter.commands;
 
-import familytree.model.FamilyTree;
-import familytree.model.Person;
+import familytree.service.FamilyTreeService;
 import familytree.view.FamilyTreeView;
 
 public class SortByAgeCommand implements Command {
-    private FamilyTree<Person> familyTree;
+    private FamilyTreeService service;
     private FamilyTreeView view;
 
-    public SortByAgeCommand(FamilyTree<Person> familyTree, FamilyTreeView view) {
-        this.familyTree = familyTree;
+    public SortByAgeCommand(FamilyTreeService service, FamilyTreeView view) {
+        this.service = service;
         this.view = view;
     }
 
     @Override
     public void execute() {
-        familyTree.sortByAge();
-        view.displayMessage("Members sorted by age.");
+        service.sortByAge();
+        view.displayMessage("Члены семьи отсортированы по возрасту.");
     }
 
     @Override
     public String getDescription() {
-        return "Sort Members by Age";
+        return "Сортировать по Возрасту";
     }
 }

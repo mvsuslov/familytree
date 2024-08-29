@@ -11,12 +11,12 @@ public class ExitCommand implements Command {
 
     @Override
     public void execute() {
-        view.displayMessage("Exiting program.");
+        view.displayMessage("Выход из программы.");
         System.exit(0);
     }
 
     @Override
     public String getDescription() {
-        return "Exit";
+        return "Выход";
     }
 }

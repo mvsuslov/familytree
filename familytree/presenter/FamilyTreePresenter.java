@@ -1,38 +1,49 @@
 package familytree.presenter;
 
-import familytree.presenter.commands.Command;
+import familytree.service.FamilyTreeService;
+import familytree.presenter.commands.*;
 import familytree.view.FamilyTreeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FamilyTreePresenter {
-    private List<Command> commands;
+    private FamilyTreeService service;
     private FamilyTreeView view;
+    private List<Command> commands;
 
-    public FamilyTreePresenter(List<Command> commands, FamilyTreeView view) {
-        this.commands = commands;
+    public FamilyTreePresenter(FamilyTreeService service, FamilyTreeView view) {
+        this.service = service;
         this.view = view;
+        this.commands = new ArrayList<>();
+
+        commands.add(new AddMemberCommand(service, view));
+        commands.add(new FindAndDisplayMemberCommand(service, view));
+        commands.add(new DisplayFamilyTreeCommand(service, view));
+        commands.add(new SortByNameCommand(service, view));
+        commands.add(new SortByAgeCommand(service, view));
+        commands.add(new SaveTreeCommand(service, view));
+        commands.add(new LoadTreeCommand(service, view));
+        commands.add(new ExitCommand(view));
     }
 
     public void start() {
-        boolean running = true;
-        while (running) {
+        while (true) {
             displayMenu();
             int choice = view.getUserInput();
 
-            if (choice > 0 && choice <= commands.size()) {
+            if (choice >= 1 && choice <= commands.size()) {
                 commands.get(choice - 1).execute();
             } else {
-                view.displayMessage("Invalid option. Please try again.");
+                view.displayMessage("Неверный выбор. Попробуйте еще раз.");
             }
         }
     }
 
     private void displayMenu() {
-        view.displayMessage("Menu:");
+        view.displayMessage("Выберите действие:");
         for (int i = 0; i < commands.size(); i++) {
             view.displayMessage((i + 1) + ". " + commands.get(i).getDescription());
         }
-        view.displayMessage("Choose an option: ");
     }
 }

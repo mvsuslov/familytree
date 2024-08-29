@@ -1,26 +1,25 @@
 package familytree.presenter.commands;
 
-import familytree.model.FamilyTree;
-import familytree.model.Person;
+import familytree.service.FamilyTreeService;
 import familytree.view.FamilyTreeView;
 
 public class SortByNameCommand implements Command {
-    private FamilyTree<Person> familyTree;
+    private FamilyTreeService service;
     private FamilyTreeView view;
 
-    public SortByNameCommand(FamilyTree<Person> familyTree, FamilyTreeView view) {
-        this.familyTree = familyTree;
+    public SortByNameCommand(FamilyTreeService service, FamilyTreeView view) {
+        this.service = service;
         this.view = view;
     }
 
     @Override
     public void execute() {
-        familyTree.sortByName();
-        view.displayMessage("Members sorted by name.");
+        service.sortByName();
+        view.displayMessage("Члены семьи отсортированы по имени.");
     }
 
     @Override
     public String getDescription() {
-        return "Sort Members by Name";
+        return "Сортировать по Имени";
     }
 }

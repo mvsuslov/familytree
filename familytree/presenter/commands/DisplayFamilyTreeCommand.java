@@ -1,30 +1,26 @@
 package familytree.presenter.commands;
 
-import familytree.model.FamilyTree;
+import familytree.service.FamilyTreeService;
 import familytree.model.Person;
 import familytree.view.FamilyTreeView;
 
 public class DisplayFamilyTreeCommand implements Command {
-    private FamilyTree<Person> familyTree;
+    private FamilyTreeService service;
     private FamilyTreeView view;
 
-    public DisplayFamilyTreeCommand(FamilyTree<Person> familyTree, FamilyTreeView view) {
-        this.familyTree = familyTree;
+    public DisplayFamilyTreeCommand(FamilyTreeService service, FamilyTreeView view) {
+        this.service = service;
         this.view = view;
     }
 
     @Override
     public void execute() {
-        view.displayMessage("Enter ID of member to display family tree:");
-        int id = view.getUserInput();
-        Person member = familyTree.findMemberById(id);
-        if (member != null) {
-            StringBuilder tree = new StringBuilder();
-            buildFamilyTreeString(member, 0, tree);
-            view.displayFamilyTree(tree.toString());
-        } else {
-            view.displayMessage("Member not found.");
-           }
+        StringBuilder treeString = new StringBuilder();
+        for (Person member : service.getTree().getMembers()) {
+            buildFamilyTreeString(member, 0, treeString);
+        }
+        view.displayFamilyTree(treeString.toString());
+    }
 
     private void buildFamilyTreeString(Person member, int level, StringBuilder tree) {
         tree.append(" ".repeat(level * 4))
@@ -37,7 +33,7 @@ public class DisplayFamilyTreeCommand implements Command {
 
         if (member.getSpouse() != null) {
             tree.append(" ".repeat(level * 4))
-                .append("Spouse: ")
+                .append("Супруг(а): ")
                 .append(member.getSpouse().getName())
                 .append("\n");
         }
@@ -49,6 +45,6 @@ public class DisplayFamilyTreeCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Display Family Tree by ID";
+        return "Показать Генеалогическое Древо";
     }
 }

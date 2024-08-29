@@ -26,11 +26,11 @@ public class ConsoleView implements FamilyTreeView {
 
     @Override
     public void displayMemberInfo(String info) {
-        System.out.println("Member Info: " + info);
+        System.out.println("Информация о человеке: " + info);
     }
 
     @Override
     public void displayFamilyTree(String tree) {
-        System.out.println("Family Tree:\n" + tree);
+        System.out.println("Генеалогическое древо:\n" + tree);
     }
 }
